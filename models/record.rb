@@ -1,9 +1,10 @@
 require 'json'
 
 class Record
+
   def self.all
     begin
-      db = File.read("database.json")
+      db = File.read("./database.json")
       db = JSON.parse(db)
       
       accessor_class = self.name
@@ -24,8 +25,16 @@ class Record
       end
     rescue Errno::ENOENT => error
       p "File error, database.json is not exist"
+      exit!
     rescue JSON::ParserError => error
       p "JSON File cannot be parsed, check file used"
+      exit!
+    end
+  end
+
+  def to_h
+    instance_variables.each_with_object({}) do |var, hash|
+      hash[var.to_s.delete('@').to_sym] = instance_variable_get(var)
     end
   end
 
