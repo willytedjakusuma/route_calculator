@@ -22,11 +22,4 @@ p "Nice, which sailing type do you prefer ?"
 sailing_type = "fastest"
 
 
-
-case sailing_type
-when "fastest"
-  puts RouteFinder.find_fastest(sailings, origin_code, destination_code).inspect
-end
-
-
-exit!
+puts RouteFinder.find_best_routes(sailings, origin_code, destination_code, sailing_type).inspect

@@ -1,6 +1,12 @@
+require_relative 'route_strategy'
+
 class RouteFinder
+  SAILING_TYPE = %w[fastest cheapest cheapest_direct].freeze
+
   class << self
-    def find_fastest(sailings, origin, destination)
+    def find_best_routes(sailings, origin, destination, sailing_type)
+      raise "Invalid sailing type" unless SAILING_TYPE.include?(sailing_type)
+      
       grouped_sailings = 
         sailings
           .select {|sailing| sailing.origin == origin || sailing.destination == destination }
@@ -11,8 +17,7 @@ class RouteFinder
       result = grouped_sailings[:from].reduce(nil) do |best, sailing_from|
         sailings_to_destination = available_connections(grouped_sailings[:to], sailing_from)
         current_routes = find_routes(sailing_from, sailings_to_destination, destination)
-        travel_time = current_routes.last.arrive_date - current_routes.first.depart_date
-        best.nil? || travel_time < best[:time] ? { routes: current_routes, time: travel_time } : best
+        RouteStrategy.public_send(sailing_type, current_routes, best)
       end
 
       result&.dig(:routes)&.map(&:to_h)
