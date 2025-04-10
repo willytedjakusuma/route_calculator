@@ -4,10 +4,10 @@ require "pry"
 
 class ExchangeRate < Record
 
-  attr_accessor :date, :usd, :idr
+  attr_accessor :date, :usd, :idr, :eur
 
   def initialize(data)
-    @date = Utils.format_date(data.first)
+    @date = Utils.format_string_to_date(data.first)
     @usd = data.last["usd"]
     @idr = data.last["idr"]
     @eur = data.last["eur"]
