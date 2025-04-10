@@ -4,10 +4,12 @@ class Record
 
   def self.all
     begin
-      db = File.read("./database.json")
+      db = File.read(ENV["DB_PATH"] || "./database.json")
       db = JSON.parse(db)
       
       accessor_class = self.name
+
+      binding.pry
 
       case accessor_class
       when "Sailing"
