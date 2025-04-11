@@ -11,5 +11,15 @@ FactoryBot.define do
     sailing_code { rate[:sailing_code] }
 
     initialize_with { attributes }
+
+    trait :no_connection do 
+      origin_port { "port of origin" }
+      destination_port { "port of destination but never connect here" }
+    end
+
+    trait :isolated do 
+      origin_port { "isolated origin" }
+      destination_port { "isolated destination" }
+    end
   end
 end
