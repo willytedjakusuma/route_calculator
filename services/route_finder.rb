@@ -7,24 +7,32 @@ class RouteFinder
 
   class << self
     def find_best_routes(origin, destination, sailing_type)
-      sailing_type = "cheapest_direct" if sailing_type == "cheapest-direct"
-      raise "Invalid sailing type" unless SAILING_TYPE.include?(sailing_type)
-      
-      grouped_sailings = 
-        @sailings
-          .select {|sailing| sailing.origin == origin || sailing.destination == destination }
-          .group_by {|sailing| sailing.origin == origin ? :from : :to }
+      begin
+        sailing_type = "cheapest_direct" if sailing_type == "cheapest-direct"
+        raise "Invalid sailing type" unless SAILING_TYPE.include?(sailing_type)
+        
+        grouped_sailings = 
+          @sailings
+            .select {|sailing| sailing.origin == origin || sailing.destination == destination }
+            .group_by {|sailing| sailing.origin == origin ? :from : :to }
 
-      return [] unless grouped_sailings[:from] && grouped_sailings[:to]
+        return [] unless grouped_sailings[:from] && grouped_sailings[:to]
 
-      result = grouped_sailings[:from].reduce(nil) do |best, sailing_from|
-        current_routes = find_routes(sailing_from, available_connections(grouped_sailings[:to], sailing_from), destination)
+        result = grouped_sailings[:from].reduce(nil) do |best, sailing_from|
+          current_routes = find_routes(sailing_from, available_connections(grouped_sailings[:to], sailing_from), destination)
 
-        next best unless current_routes.any?
-        RouteStrategy.new(routes: current_routes).public_send(sailing_type, best)
+          next best unless current_routes.any?
+          RouteStrategy.new(routes: current_routes).public_send(sailing_type, best)
+        end
+
+        result&.dig(:routes) || []
+      rescue RuntimeError => error
+        case error.message
+        when "Invalid sailing type"
+          print "Your sailing type is incorrect, please select between fastest, cheapest, or cheapest-direct"
+        end
       end
-
-      result&.dig(:routes)
+      
     end
 
     private
