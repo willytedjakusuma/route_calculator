@@ -9,8 +9,6 @@ class Record
       
       accessor_class = self.name
 
-      binding.pry
-
       case accessor_class
       when "Sailing"
         accessor_class = "sailings"
