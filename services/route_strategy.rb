@@ -21,7 +21,7 @@ class RouteStrategy
   end
 
   def cheapest_direct(best)
-    return best if routes.length > 1
+    return best if @routes.length > 1
 
     build_cheapest(@routes, best)
   end
