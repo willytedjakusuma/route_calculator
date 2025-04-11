@@ -14,6 +14,7 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
+    ansi (1.5.0)
     base64 (0.2.0)
     benchmark (0.4.0)
     bigdecimal (3.1.9)
@@ -53,10 +54,19 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
+    simplecov-console (0.9.3)
+      ansi
+      simplecov
+      terminal-table
     simplecov-html (0.13.1)
     simplecov_json_formatter (0.1.4)
+    terminal-table (4.0.0)
+      unicode-display_width (>= 1.1.1, < 4)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    unicode-display_width (3.1.4)
+      unicode-emoji (~> 4.0, >= 4.0.4)
+    unicode-emoji (4.0.4)
     uri (1.0.3)
 
 PLATFORMS
@@ -69,6 +79,7 @@ DEPENDENCIES
   pry (~> 0.15.0)
   rspec
   simplecov
+  simplecov-console
 
 BUNDLED WITH
    2.6.5
