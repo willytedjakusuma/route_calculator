@@ -1,148 +1,158 @@
 {
   "sailings": [
     {
-      "origin_port": "22R9",
-      "destination_port": "ETAN",
-      "departure_date": "2025-04-16",
-      "arrival_date": "2025-05-19",
-      "sailing_code": "EMM6"
+      "origin_port": "GXCN",
+      "destination_port": "6Y13",
+      "departure_date": "2025-04-18",
+      "arrival_date": "2025-04-20",
+      "sailing_code": "R0YN"
     },
     {
-      "origin_port": "ETMR",
-      "destination_port": "0QXD",
-      "departure_date": "2025-04-15",
-      "arrival_date": "2025-05-14",
-      "sailing_code": "LYQM"
+      "origin_port": "5COT",
+      "destination_port": "3SN6",
+      "departure_date": "2025-04-27",
+      "arrival_date": "2025-04-30",
+      "sailing_code": "F6NU"
     },
     {
-      "origin_port": "LYXI",
-      "destination_port": "8Y9N",
-      "departure_date": "2025-04-30",
-      "arrival_date": "2025-04-26",
-      "sailing_code": "Y76Y"
+      "origin_port": "T7MS",
+      "destination_port": "YYUQ",
+      "departure_date": "2025-04-19",
+      "arrival_date": "2025-05-21",
+      "sailing_code": "T15E"
     },
     {
-      "origin_port": "CDIS",
-      "destination_port": "JVPE",
-      "departure_date": "2025-05-08",
-      "arrival_date": "2025-05-07",
-      "sailing_code": "YYEI"
+      "origin_port": "D717",
+      "destination_port": "WOXS",
+      "departure_date": "2025-05-04",
+      "arrival_date": "2025-06-09",
+      "sailing_code": "4IOT"
     },
     {
-      "origin_port": "CZPC",
-      "destination_port": "QJQC",
-      "departure_date": "2025-05-06",
-      "arrival_date": "2025-05-03",
-      "sailing_code": "1R87"
+      "origin_port": "Z8ZH",
+      "destination_port": "OQJU",
+      "departure_date": "2025-04-17",
+      "arrival_date": "2025-05-13",
+      "sailing_code": "NXWO"
     },
     {
-      "origin_port": "3JYL",
-      "destination_port": "49AZ",
+      "origin_port": "0JKX",
+      "destination_port": "MCXI",
       "departure_date": "2025-04-21",
+      "arrival_date": "2025-05-11",
+      "sailing_code": "1YDH"
+    },
+    {
+      "origin_port": "AX5M",
+      "destination_port": "65CC",
+      "departure_date": "2025-04-22",
+      "arrival_date": "2025-05-14",
+      "sailing_code": "UATT"
+    },
+    {
+      "origin_port": "FMDB",
+      "destination_port": "T4JV",
+      "departure_date": "2025-04-19",
+      "arrival_date": "2025-05-29",
+      "sailing_code": "LVSX"
+    },
+    {
+      "origin_port": "924H",
+      "destination_port": "C381",
+      "departure_date": "2025-04-17",
       "arrival_date": "2025-05-23",
-      "sailing_code": "C3YT"
+      "sailing_code": "P1IS"
     },
     {
-      "origin_port": "3J1X",
-      "destination_port": "0TT9",
-      "departure_date": "2025-04-23",
-      "arrival_date": "2025-05-16",
-      "sailing_code": "5TDG"
-    },
-    {
-      "origin_port": "HF72",
-      "destination_port": "WGJ4",
-      "departure_date": "2025-04-23",
-      "arrival_date": "2025-04-22",
-      "sailing_code": "O6BO"
-    },
-    {
-      "origin_port": "TXWE",
-      "destination_port": "9TGX",
+      "origin_port": "Y6W9",
+      "destination_port": "EIXU",
       "departure_date": "2025-04-14",
-      "arrival_date": "2025-05-01",
-      "sailing_code": "N6MN"
-    },
-    {
-      "origin_port": "TDMG",
-      "destination_port": "4WIB",
-      "departure_date": "2025-04-23",
-      "arrival_date": "2025-04-26",
-      "sailing_code": "N3DD"
+      "arrival_date": "2025-05-14",
+      "sailing_code": "8Q9W"
     }
   ],
   "rates": [
     {
-      "sailing_code": "OU07",
-      "rate": 1868.09,
-      "rate_currency": "IDR"
+      "sailing_code": "NTRP",
+      "rate": 2056.24,
+      "rate_currency": "USD"
     },
     {
-      "sailing_code": "M69Q",
-      "rate": 2295.38,
+      "sailing_code": "8LSE",
+      "rate": 2738.44,
       "rate_currency": "EUR"
     },
     {
-      "sailing_code": "CZ7T",
-      "rate": 5724.95,
+      "sailing_code": "N6RT",
+      "rate": 8023.56,
+      "rate_currency": "IDR"
+    },
+    {
+      "sailing_code": "023M",
+      "rate": 1598.37,
+      "rate_currency": "IDR"
+    },
+    {
+      "sailing_code": "5UCW",
+      "rate": 8265.35,
+      "rate_currency": "EUR"
+    },
+    {
+      "sailing_code": "OJJ9",
+      "rate": 4746.21,
+      "rate_currency": "EUR"
+    },
+    {
+      "sailing_code": "P8WG",
+      "rate": 3955.32,
       "rate_currency": "USD"
     },
     {
-      "sailing_code": "9YSS",
-      "rate": 1352.11,
-      "rate_currency": "IDR"
-    },
-    {
-      "sailing_code": "3VXV",
-      "rate": 1157.92,
-      "rate_currency": "USD"
-    },
-    {
-      "sailing_code": "J4AT",
-      "rate": 9078.34,
-      "rate_currency": "IDR"
-    },
-    {
-      "sailing_code": "93ZI",
-      "rate": 4654.59,
-      "rate_currency": "IDR"
-    },
-    {
-      "sailing_code": "IPMJ",
-      "rate": 3526.33,
+      "sailing_code": "3FAU",
+      "rate": 2878.79,
       "rate_currency": "IDR"
     }
   ],
   "exchange_rates": {
-    "2025-04-04": {
-      "eur": 790.23,
-      "usd": 498.79,
-      "idr": 220805.05
+    "2025-03-20": {
+      "eur": 953.27,
+      "usd": 164.58,
+      "idr": 513378.42
     },
-    "2025-03-21": {
-      "eur": 890.64,
-      "usd": 552.27,
-      "idr": 448792.93
-    },
-    "2025-03-30": {
-      "eur": 870.14,
-      "usd": 182.11,
-      "idr": 763152.44
+    "2025-04-07": {
+      "eur": 458.33,
+      "usd": 519.89,
+      "idr": 497668.45
     },
     "2025-04-09": {
-      "eur": 559.35,
-      "usd": 914.68,
-      "idr": 954583.87
+      "eur": 127.17,
+      "usd": 980.21,
+      "idr": 994360.15
     },
     "2025-04-10": {
-      "eur": 415.26,
-      "usd": 553.88,
-      "idr": 895328.89
+      "eur": 617.17,
+      "usd": 163.33,
+      "idr": 428679.54
     },
-    "2025-03-24": {
-      "eur": 405.94,
-      "usd": 131.33,
-      "idr": 665349.93
+    "2025-03-30": {
+      "eur": 762.21,
+      "usd": 771.19,
+      "idr": 794822.97
+    },
+    "2025-04-08": {
+      "eur": 714.73,
+      "usd": 970.02,
+      "idr": 197046.58
+    },
+    "2025-04-04": {
+      "eur": 439.72,
+      "usd": 656.75,
+      "idr": 484890.28
+    },
+    "2025-04-01": {
+      "eur": 397.81,
+      "usd": 482.79,
+      "idr": 511038.06
     }
   }
 }

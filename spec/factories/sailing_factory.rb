@@ -35,5 +35,21 @@ FactoryBot.define do
       destination_port { "CDES" }
       sailing_code { rate[:sailing_code] }
     end
+
+    trait :fastest_origin do
+      origin_port { "FORI" }
+      destination_port { "FDOR" }
+      sailing_code { rate[:sailing_code] }
+      departure_date { "2025-04-30" }
+      arrival_date { "2025-04-30" }
+    end
+
+    trait :fastest_destination do
+      origin_port { "FDOR" }
+      destination_port { "FDES" }
+      sailing_code { rate[:sailing_code] }
+      departure_date { "2025-04-30" }
+      arrival_date { "2025-04-31" }
+    end
   end
 end
