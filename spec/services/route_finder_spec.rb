@@ -3,8 +3,12 @@ require_relative "../../services/route_finder.rb"
 
 RSpec.describe RouteFinder do 
   let(:sailings) { RouteFinder.instance_variable_get(:@sailings) }
-  let(:origin_port) { sailings.sample.origin }
-  let(:destination_port) { sailings.sample.destination }
+  let(:direct_sailing) { sailings.sample }
+
+  def symbolize_to_string(hash)
+    # to manipulate keys to string key from symbol
+    hash.transform_keys(&:to_s)
+  end
 
   describe "Fetch fake data" do
     describe "with fake_database.json exist" do
@@ -21,58 +25,114 @@ RSpec.describe RouteFinder do
     describe "with incorrect sailing_type" do
       it "will raise error with correct message" do
         expect{
-          RouteFinder.find_best_routes(origin_port,destination_port, "invalid_sailing_type")
+          RouteFinder.find_best_routes(direct_sailing.origin, direct_sailing.destination, "invalid_sailing_type")
         }.to output("Your sailing type is incorrect, please select between fastest, cheapest, or cheapest-direct").to_stdout
       end
     end
 
     describe "with missing origin_port" do
       it "will raise error with correct message" do
-        results = RouteFinder.find_best_routes(nil, destination_port, "fastest")
+        results = RouteFinder.find_best_routes(nil, direct_sailing.destination, "fastest")
         expect(results).to eq([])
       end
     end
 
     describe "with missing destination_port" do
       it "will raise error with correct message" do
-        results = RouteFinder.find_best_routes(origin_port, nil, "cheapest-direct")
+        results = RouteFinder.find_best_routes(direct_sailing.origin, nil, "cheapest-direct")
         expect(results).to eq([])
       end
     end
 
     describe "with cheapest-direct" do
-      it "will still return results" do
-        results = RouteFinder.find_best_routes(origin_port, destination_port, "cheapest-direct")
-        expect(results).to be_an(Array)
-        expect(results).not_to be_empty
+      it "will not raise invalid sailing type error" do
+        
+        expect{
+          results = RouteFinder.find_best_routes(direct_sailing.origin, direct_sailing.destination, "fastest")
+
+          expect(results).to be_an(Array)
+          expect(results).not_to be_empty
+        }.not_to raise_error
       end
     end
+
+    describe "with correct sailing_type" do
+      it "will not raise error" do
+        expect { 
+          RouteFinder.find_best_routes(direct_sailing.origin, direct_sailing.destination, "fastest") 
+        }.not_to raise_error
+      end
+    end
+
+    # WIP, test unknown error
+    # describe "with unknown error" do
+    #   it "will print error message" do
+    #     allow(RouteFinder).to receive(:send).with(:available_connections, [], nil).and_raise(StandardError, "Unknown Error")
+
+    #     expect {
+    #       RouteFinder.find_best_routes(direct_sailing.origin, direct_sailing.destination, "fastest")
+    #     }.to output("Unknown Error").to_stdout
+    #   end
+    # end
   end
 
   describe "Flow checking" do
+    let(:isolated_sailings) { [Sailing.new(symbolize_to_string(build(:sailing, :isolated)))] }
+    let(:no_connection_sailings) { [Sailing.new(symbolize_to_string(build(:sailing, :no_connection)))] }
+
     describe "with no available connection" do
-      let(:sailings) { [build(:sailing, :no_connection)] }
+      before do
+        RouteFinder.instance_variable_set(:@sailings, no_connection_sailings)
+      end
 
       it "will return empty array as results" do
-        allow(RouteFinder).to receive(:instance_variable_get).with(@sailings).and_return(sailings) # Manipulate route finder to get sailings with no connection
-
-        results = RouteFinder.find_best_routes("port of origin", "port of destination but never connect here", "fastest")
+        results = RouteFinder.find_best_routes("NCOR", "UNKN", "fastest")
         expect(results).to eq([])
       end
     end
 
     describe "with isolated route, no next sailing" do
-      let(:sailings) { [build(:sailing, :isolated)] }
+      before do
+        RouteFinder.instance_variable_set(:@sailings, isolated_sailings)
+      end
 
       it "will return only 1 route" do
-        allow(RouteFinder).to receive(:instance_variable_get).with(@sailings).and_return(sailings) # Manipulate route finder to get isolated sailing
+        results = RouteFinder.find_best_routes("IORI", "IDES", "fastest")
 
-        results = RouteFinder.find_best_routes("isolated origin", "isolated destination", "fastest")
-
-        print results
         expect(results.size).to eq(1)
-        expect(results.first[:origin]).to eq("isolated origin")
-        expect(results.first[:destination]).to eq("isolated destination")
+        expect(results.first[:origin]).to eq("IORI")
+        expect(results.first[:destination]).to eq("IDES")
+      end
+    end
+
+    describe "with missing grouped_sailings[:to]" do
+      before do
+        RouteFinder.instance_variable_set(:@sailings, isolated_sailings)
+      end
+      it "will still return isolated sailing" do
+        results = RouteFinder.find_best_routes("IORI", "IDES", "fastest")
+
+        expect(results.size).to eq(1)
+        expect(results.first[:origin]).to eq("IORI")
+      end
+    end
+
+    describe "with connected routes" do
+      let(:connected_sailings) {
+        [
+          Sailing.new(symbolize_to_string(build(:sailing, :connected_origin))),
+          Sailing.new(symbolize_to_string(build(:sailing, :connected_destination))),
+        ]
+      }
+
+      before do
+        RouteFinder.instance_variable_set(:@sailings, connected_sailings)
+      end
+
+      it "will return multiple routes" do
+        results = RouteFinder.find_best_routes("CORI", "CDES", "fastest")
+
+        expect(results.size).to eq(2)
       end
     end
   end

@@ -13,13 +13,27 @@ FactoryBot.define do
     initialize_with { attributes }
 
     trait :no_connection do 
-      origin_port { "port of origin" }
-      destination_port { "port of destination but never connect here" }
+      origin_port { "NCOR" }
+      destination_port { "NCDE" }
+      sailing_code { rate[:sailing_code] }
     end
 
     trait :isolated do 
-      origin_port { "isolated origin" }
-      destination_port { "isolated destination" }
+      origin_port { "IORI" }
+      destination_port { "IDES" }
+      sailing_code { rate[:sailing_code] }
+    end
+
+    trait :connected_origin do
+      origin_port { "CORI" }
+      destination_port { "CDOR" }
+      sailing_code { rate[:sailing_code] }
+    end
+
+    trait :connected_destination do 
+      origin_port { "CDOR" }
+      destination_port { "CDES" }
+      sailing_code { rate[:sailing_code] }
     end
   end
 end
