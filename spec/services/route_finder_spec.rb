@@ -5,11 +5,6 @@ RSpec.describe RouteFinder do
   let(:sailings) { RouteFinder.instance_variable_get(:@sailings) }
   let(:direct_sailing) { sailings.sample }
 
-  def symbolize_to_string(hash)
-    # to manipulate keys to string key from symbol
-    hash.transform_keys(&:to_s)
-  end
-
   describe "Fetch fake data" do
     describe "with fake_database.json exist" do
       it "can fetch sailings data from fake database.json" do
@@ -77,8 +72,8 @@ RSpec.describe RouteFinder do
   end
 
   describe "Flow checking" do
-    let(:isolated_sailings) { [Sailing.new(symbolize_to_string(build(:sailing, :isolated)))] }
-    let(:no_connection_sailings) { [Sailing.new(symbolize_to_string(build(:sailing, :no_connection)))] }
+    let(:isolated_sailings) { [Sailing.new(Utils.symbolize_to_string(build(:sailing, :isolated)))] }
+    let(:no_connection_sailings) { [Sailing.new(Utils.symbolize_to_string(build(:sailing, :no_connection)))] }
 
     describe "with no available connection" do
       before do
@@ -109,6 +104,7 @@ RSpec.describe RouteFinder do
       before do
         RouteFinder.instance_variable_set(:@sailings, isolated_sailings)
       end
+      
       it "will still return isolated sailing" do
         results = RouteFinder.find_best_routes("IORI", "IDES", "fastest")
 
@@ -120,8 +116,8 @@ RSpec.describe RouteFinder do
     describe "with connected routes" do
       let(:connected_sailings) {
         [
-          Sailing.new(symbolize_to_string(build(:sailing, :connected_origin))),
-          Sailing.new(symbolize_to_string(build(:sailing, :connected_destination))),
+          Sailing.new(Utils.symbolize_to_string(build(:sailing, :connected_origin))),
+          Sailing.new(Utils.symbolize_to_string(build(:sailing, :connected_destination))),
         ]
       }
 

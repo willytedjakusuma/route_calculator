@@ -8,4 +8,13 @@ module Utils
   def self.format_date_to_string(date)
     date.strftime("%Y-%m-%d")
   end
+
+  def self.symbolize_to_string(hash)
+    # to manipulate keys to string key from symbol
+    hash.transform_keys(&:to_s)
+  end
+
+  def self.days(day)
+    day * 86_400
+  end
 end
