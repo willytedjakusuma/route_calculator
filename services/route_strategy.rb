@@ -10,7 +10,7 @@ class RouteStrategy
   end
 
   def fastest(best)
-    travel_time = @routes.last.arrive_date - routes.first.depart_date
+    travel_time = @routes.last[:arrive_date] - @routes.first[:depart_date]
     return { routes: @routes, time: travel_time } if best.nil? || travel_time < best[:time]
 
     best
