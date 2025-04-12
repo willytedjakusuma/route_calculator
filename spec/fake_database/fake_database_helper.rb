@@ -11,7 +11,7 @@ module FakeDatabaseHelper
   {
     sailings: FactoryBot.build_list(:sailing, sailing_count),
     rates: FactoryBot.build_list(:rate, rate_count),
-    exchange_rates: FactoryBot.build_list(:exchange_rate, exchange_rate_count)
+    exchange_rates: FactoryBot.build_list(:exchange_rate, exchange_rate_count).reduce(&:merge)
   }
   end
 
