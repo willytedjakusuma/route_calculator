@@ -1,22 +1,8 @@
 require 'spec_helper'
 
-require_relative "../../services/route_strategy.rb"
-require_relative "../../services/route_finder.rb"
-require_relative "../../services/utils.rb"
-
-require_relative "../../models/sailing.rb"
-require_relative "../../models/rate.rb"
-require_relative "../../models/exchange_rate.rb"
-
-require_relative "../fake_database/fake_database_helper.rb"
-
 RSpec.describe RouteStrategy do 
-  let(:database) { FakeDatabaseHelper.generate }
-  let(:sailings) { database[:sailings].map {|sailing| Sailing.new(Utils.symbolize_to_string(sailing))} } 
-  let(:rates) { database[:rates].map {|rate| Rate.new(Utils.symbolize_to_string(rate))} } 
-  let(:exchange_rates) { database[:exchange_rates].map {|date, xrate| ExchangeRate.new([date, Utils.symbolize_to_string(xrate)])} } 
+  include_context "fake database setup"
 
-  
   describe "Method test" do 
     describe ".initialize" do
       subject do 
@@ -49,39 +35,7 @@ RSpec.describe RouteStrategy do
     end
 
     describe ".fastest" do
-      let(:random_sailing) { sailings.sample }
-      let(:best) {
-        {
-          routes: [random_sailing],
-          time: random_sailing.arrive_date - random_sailing.depart_date
-        }
-      }
-      let(:fastest_route_data) { 
-        {
-          origin_port: random_sailing.origin,
-          destination_port: random_sailing.destination,
-          arrival_date: Utils.format_date_to_string(random_sailing.arrive_date - Utils.days(3)),
-          departure_date: Utils.format_date_to_string(random_sailing.depart_date),
-          sailing_code: sailings.sample.sailing_code,
-        } 
-      }
-      let(:slower_route_data) { 
-        {
-          origin_port: random_sailing.origin,
-          destination_port: random_sailing.destination,
-          arrival_date: Utils.format_date_to_string(random_sailing.arrive_date + Utils.days(3)),
-          departure_date: Utils.format_date_to_string(random_sailing.depart_date),
-          sailing_code: sailings.sample.sailing_code,
-        } 
-      }
-
-      subject do
-        described_class.new(
-          routes: [Sailing.new(Utils.symbolize_to_string(fastest_route_data))]
-        ) 
-      end
-
-      let(:result) { subject.fastest(best) }
+      include_context "fastest route setup"
 
       it "will return data with correct format" do
         expect(result).to be_a(Hash)
@@ -90,15 +44,7 @@ RSpec.describe RouteStrategy do
       end
 
       describe "time comparison" do
-        describe "better time" do
-          subject do
-            described_class.new(
-              routes: [Sailing.new(Utils.symbolize_to_string(fastest_route_data))]
-            ) 
-          end
-
-          let(:result) { subject.fastest(best) }
-
+        context "better time" do
           it "will return faster routes code and time" do
             route_results_code = result[:routes].map {|r| r[:sailing_code] }
             expect(route_results_code).to include(fastest_route_data[:sailing_code])
@@ -106,14 +52,8 @@ RSpec.describe RouteStrategy do
           end
         end
 
-        describe "worse time" do
-          subject do
-            described_class.new(
-              routes: [Sailing.new(Utils.symbolize_to_string(slower_route_data))]
-            ) 
-          end
-
-          let(:result) { subject.fastest(best) }
+        context "worse time" do
+          include_context "slower route setup"
 
           it "will return best routes code and time" do
             route_results_code = result[:routes].map {|r| r.to_h[:sailing_code] }
@@ -122,10 +62,40 @@ RSpec.describe RouteStrategy do
           end
         end
       end
+    end
 
-    end
     describe ".cheapest" do
+      include_context "cheapest single route setup"
+      it "will return correct data format" do
+        expect(result).to be_a(Hash)
+        expect(result).to have_key(:routes)
+        expect(result[:routes]).to be_an(Array)
+        expect(result[:routes].size).to be > 0
+        expect(result).to have_key(:total_cost_in_idr)
+      end
+
+      describe "price comparison" do
+        context "lower price" do
+          it "will return cheaper routes code and total_cost_in_idr" do
+            route_results_code = result[:routes].map {|r| r[:sailing_code] }
+            expect(route_results_code).to include(cheaper_route_data[:sailing_code])
+            expect(result[:total_cost_in_idr]).to be < best[:total_cost_in_idr]
+          end
+        end
+
+        context "higher price" do
+          include_context "expensive route setup"
+
+          it "will return best routes code and time" do
+            route_results_code = result[:routes].map {|r| r.to_h[:sailing_code] }
+            expect(route_results_code).to include(random_sailing.sailing_code)
+            expect(result[:total_cost_in_idr]).to eq(best[:total_cost_in_idr])
+          end
+
+        end
+      end
     end
+
     describe ".cheapest_direct" do
     end
     describe ".build_cheapest" do

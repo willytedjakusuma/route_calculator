@@ -7,7 +7,7 @@ FactoryBot.define do
     origin_port { Faker::Alphanumeric.alphanumeric(number: 4).upcase }
     destination_port { Faker::Alphanumeric.alphanumeric(number: 4).upcase }
     departure_date { Faker::Date.forward(days: rand(1..30)).to_s }
-    arrival_date { Faker::Date.forward(days: rand(31..60)).to_s }
+    arrival_date { Faker::Date.forward(days: rand(60..90)).to_s }
     sailing_code { rate[:sailing_code] }
 
     initialize_with { attributes }

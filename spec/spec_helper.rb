@@ -8,6 +8,10 @@ require "simplecov-console"
 Dir[File.join(__dir__, "factories/*.rb")].sort.each { |f| require f }
 
 Dir[File.join(__dir__, "fake_database/*.rb")].sort.each { |f| require f }
+Dir[File.join(__dir__, "services/shared_context/*.rb")].each { |f| require_relative f }
+
+Dir[File.join(__dir__, "../models/*.rb")].each { |f| require_relative f }
+Dir[File.join(__dir__, "../services/*.rb")].each { |f| require_relative f }
 
 
 include FakeDatabaseHelper

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require_relative "../../services/route_finder.rb"
 
 RSpec.describe RouteFinder do 
   let(:sailings) { RouteFinder.instance_variable_get(:@sailings) }
@@ -104,7 +103,7 @@ RSpec.describe RouteFinder do
       before do
         RouteFinder.instance_variable_set(:@sailings, isolated_sailings)
       end
-      
+
       it "will still return isolated sailing" do
         results = RouteFinder.find_best_routes("IORI", "IDES", "fastest")
 
