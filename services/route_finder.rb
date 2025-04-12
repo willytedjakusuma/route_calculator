@@ -10,26 +10,33 @@ class RouteFinder
       begin
         sailing_type = "cheapest_direct" if sailing_type == "cheapest-direct"
         raise "Invalid sailing type" unless SAILING_TYPE.include?(sailing_type)
-        
+
         grouped_sailings = 
           @sailings
             .select {|sailing| sailing.origin == origin || sailing.destination == destination }
             .group_by {|sailing| sailing.origin == origin ? :from : :to }
 
-        return [] unless grouped_sailings[:from] && grouped_sailings[:to]
+        return [] unless grouped_sailings[:from]
 
         result = grouped_sailings[:from].reduce(nil) do |best, sailing_from|
-          current_routes = find_routes(sailing_from, available_connections(grouped_sailings[:to], sailing_from), destination)
+          current_routes = 
+            if sailing_from.destination == destination
+              [sailing_from]
+            else
+              find_routes(sailing_from, available_connections(grouped_sailings[:to], sailing_from), destination)
+            end
 
           next best unless current_routes.any?
           RouteStrategy.new(routes: current_routes).public_send(sailing_type, best)
         end
 
         result&.dig(:routes) || []
-      rescue RuntimeError => error
+      rescue => error
         case error.message
         when "Invalid sailing type"
           print "Your sailing type is incorrect, please select between fastest, cheapest, or cheapest-direct"
+        else
+          print error.message
         end
       end
       
@@ -38,7 +45,7 @@ class RouteFinder
     private
 
     def find_routes(sailing_from, sailings_to, destination, routes = [])
-      routes += [sailing_from]
+      routes += [sailing_from] if sailings_to.size > 0 || sailing_from.destination == destination
       return routes if sailing_from.destination == destination
 
       next_route, *rest_of_the_routes = sailings_to
@@ -48,6 +55,8 @@ class RouteFinder
     end
 
     def available_connections(grouped_sailings_to, from)
+      return [] if grouped_sailings_to.to_a.empty?
+
       grouped_sailings_to
         .select { |sailing_to| sailing_to.origin == from.destination }
         .sort_by { |route| route.arrive_date - route.depart_date }
