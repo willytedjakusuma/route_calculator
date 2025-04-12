@@ -7,10 +7,9 @@ class ExchangeRate < Record
   attr_accessor :date, :usd, :idr, :eur
 
   def initialize(data)
-    date_key = data.keys.first
-    @date = Utils.format_string_to_date(data.keys.first)
-    @usd = data[date_key]["usd"]
-    @idr = data[date_key]["idr"]
-    @eur = data[date_key]["eur"]
+    @date = Utils.format_string_to_date(data.first)
+    @usd = data.last["usd"]
+    @idr = data.last["idr"]
+    @eur = data.last["eur"]
   end
 end
