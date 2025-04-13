@@ -13,6 +13,10 @@ RSpec.shared_context "single route setup" do
   }
 
   let(:sailing) { Sailing.new(Utils.symbolize_to_string(route_data))}
+  let(:sailing_hash) do
+    rate = rates.find {|r| r.sailing_code == sailing.sailing_code}
+    sailing.to_h.merge(rate: rate&.rate, rate_currency: rate&.rate_currency)
+  end
 
   subject do
     described_class.new(routes: [sailing], rates: rates, exchange_rates: exchange_rates) 

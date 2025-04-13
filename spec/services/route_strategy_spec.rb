@@ -75,7 +75,7 @@ RSpec.describe RouteStrategy do
       end
     end
 
-    describe ".cheapest" do
+    describe "#cheapest" do
 
       context "when checking output format" do
         include_context "multi route setup"
@@ -138,7 +138,7 @@ RSpec.describe RouteStrategy do
       end
     end
 
-    describe ".cheapest_direct" do
+    describe "#cheapest_direct" do
 
       context "when given cheaper route with more than 1 route" do
         include_context "multi route setup"
@@ -199,42 +199,108 @@ RSpec.describe RouteStrategy do
     end
 
     describe ".build_cheapest" do
-      include_context "single route setup"
-      it "will return best if routes empty" do
-        result = subject.send(:build_cheapest, [], best)
-        expect(result).to eq(best)
+      
+      context "when given empty routes" do
+        include_context "single route setup"
+
+        let(:best) {
+          {
+            routes: [random_sailing],
+            total_cost_in_idr: 50_000_000.00
+          }
+        }
+
+        it "will return previous best routes" do
+          result = subject.send(:build_cheapest, [], best)
+          expect(result).to eq(best)
+        end
       end
 
-      it "will return correct data if best is nil" do
-        result = subject.send(:build_cheapest, [cheaper_sailing_with_rate], nil)
+      context "when best is nil" do
+        include_context "single route setup"
 
-        expect(result).to be_a(Hash)
-        expect(result).to have_key(:routes)
-        expect(result[:routes]).to be_an(Array)
-        expect(result[:routes].size).to be > 0
+        it "will return given routes" do
+          result = subject.send(:build_cheapest, [sailing_hash], nil)
+          expect(result).to be_a(Hash)
+          expect(result).to have_key(:routes)
+          expect(result[:routes]).to be_an(Array)
+          expect(result[:routes].size).to be > 0
+          route_results_code = result[:routes].map {|r| r[:sailing_code] }
+          expect(route_results_code).to include(sailing_hash[:sailing_code])
+        end
       end
 
-      it "will return cheapest route data if total_cost_in_idr is smaller" do
-        pp cheaper_sailing_with_rate
-        result = subject.send(:build_cheapest, [cheaper_sailing_with_rate], best)
+      context "when a routes cost is cheaper than best" do
+        include_context "single route setup"
 
-        route_results_code = result[:routes].map {|r| r.sailing_code }
-        binding.pry
-        expect(route_results_code).to include(cheaper_route_data[:sailing_code])
-        expect(result[:total_cost_in_idr]).to be < best_for_cheapest[:total_cost_in_idr]
+        let(:best) {
+          {
+            routes: [random_sailing],
+            total_cost_in_idr: 50_000_000.00
+          }
+        }
+
+
+        it "will return cheapest route data" do
+          result = subject.send(:build_cheapest, [sailing_hash], best)
+          route_results_code = result[:routes].map {|r| r[:sailing_code] }
+          expect(route_results_code).to include(sailing.sailing_code)
+          expect(result[:total_cost_in_idr]).to be < best[:total_cost_in_idr]
+        end
       end
 
-      include_context "expensive route setup"
-      it "will return best route data if total_cost_in_idr is bigger" do
-        result = subject.send(:build_cheapest, [expensive_sailing_with_rate], best)
+      context "when no routes cost is cheaper than best" do
+        include_context "single route setup"
 
-        route_results_code = result[:routes].map {|r| r.to_h[:sailing_code] }
-        expect(route_results_code).to include(random_sailing.sailing_code)
-        expect(result[:total_cost_in_idr]).to eq(best[:total_cost_in_idr])
+        let(:best) {
+          {
+            routes: [random_sailing.to_h],
+            total_cost_in_idr: 0.00
+          }
+        }
+
+        let(:result) { subject.send(:build_cheapest, [sailing], best) }
+
+        it "will return previous best route" do
+          result = subject.send(:build_cheapest, [sailing_hash], best)
+          route_results_code = result[:routes].map {|r| r[:sailing_code] }
+          expect(route_results_code).to include(random_sailing.sailing_code)
+          expect(result).to eq(best)
+        end
       end
+
+
     end
+
     describe ".rate_in_idr" do
+      subject do
+        described_class.new(routes: sailings, rates: rates, exchange_rates: exchange_rates) 
+      end
+
+      context "when given valid parameters" do
+        let(:rate) { rates.find { |r| r.rate_currency != "IDR" } }
+        let(:depart_date) { exchange_rates.sample.date }
+
+        it "will return float with 2 decimal" do
+          result = subject.send(:rate_in_idr, rate.rate, rate.rate_currency, depart_date)
+          expect(result).to be_a(Float)
+          expect(result.round(2)).to eq(result)
+        end
+      end
+
+      context "when exchange_rate not found" do
+        let(:rate) { rates.find { |r| r.rate_currency != "IDR" } }
+
+        it "will return float with value 0.0" do
+          result = subject.send(:rate_in_idr, rate.rate, rate.rate_currency, nil)
+          expect(result).to be_a(Float)
+          expect(result.round(2)).to eq(0.0)
+        end
+      end
+
+
     end
+    
     describe ".attach_rate" do
     end
     describe ".find_rate" do
