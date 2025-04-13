@@ -300,12 +300,71 @@ RSpec.describe RouteStrategy do
 
 
     end
-    
+
     describe ".attach_rate" do
-    end
-    describe ".find_rate" do
-    end
-    describe ".find_exchange_rate" do
+      let(:sailings_with_matching_rates) do
+        FactoryBot.build_list(:sailing, 5).map do |sailing, i|
+          sailing[:sailing_code] = rates.sample.sailing_code
+          Sailing.new(Utils.symbolize_to_string(sailing))
+        end
+      end
+      
+      subject do 
+        described_class.new(routes: sailings_with_matching_rates, rates: rates, exchange_rates: exchange_rates)
+      end
+
+      context "when routes is exist" do
+        let(:result) { subject.send(:attach_rate, sailings_with_matching_rates) }
+
+        it "will return routes data in hash" do
+          expect(result).to be_an(Array)
+          result.each do |row|
+            expect(row).to be_a(Hash)
+            expect(row).to include(
+              origin: a_kind_of(String),
+              destination: a_kind_of(String),
+              depart_date: a_kind_of(Time),
+              arrive_date: a_kind_of(Time),
+              sailing_code: a_kind_of(String)
+            )
+          end
+        end
+
+        it "will return routes data with rate and rate_currency keys" do
+          expect(result).to be_an(Array)
+          result.each do |row|
+            expect(row).to be_a(Hash)
+            expect(row).to include(
+              rate: a_kind_of(Float),
+              rate_currency: a_kind_of(String)
+            )
+          end
+        end
+
+        it "will matched first data with the example" do
+          first_data = sailings_with_matching_rates.first
+          rate = rates.find {|r| r.sailing_code == first_data.sailing_code }
+
+          expect(result.first).to match(
+            origin: first_data.origin,
+            destination: first_data.destination,
+            depart_date: first_data.depart_date,
+            arrive_date: first_data.arrive_date,
+            sailing_code: first_data.sailing_code,
+            rate: rate.rate,
+            rate_currency: rate.rate_currency
+          )
+        end
+      end
+
+      context "when routes is empty" do
+        let(:result) { subject.send(:attach_rate, []) }
+
+        it "will return empty array" do
+          expect(result).to be_an(Array)
+          expect(result.size).to eq(0)
+        end
+      end
     end
   end
 end
