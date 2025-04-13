@@ -1,5 +1,4 @@
 RSpec.shared_context "slower route setup" do
-  let(:random_sailing) { sailings.sample }
   let(:slower_route_data) { 
     {
       origin_port: random_sailing.origin,
@@ -10,18 +9,9 @@ RSpec.shared_context "slower route setup" do
     } 
   }
 
-  let(:best) {
-    {
-      routes: [random_sailing],
-      time: random_sailing.arrive_date - random_sailing.depart_date
-    }
-  }
-
   subject do
     described_class.new(
       routes: [Sailing.new(Utils.symbolize_to_string(slower_route_data))]
     ) 
   end
-
-  let(:result) { subject.fastest(best) }
 end
