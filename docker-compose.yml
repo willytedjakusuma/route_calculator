@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    command: ruby main.rb
+    volumes:
+      - .:/route_calculator
+
+  test:
+    build: .
+    command: rspec
+    volumes:
+      - .:/route_calculator
