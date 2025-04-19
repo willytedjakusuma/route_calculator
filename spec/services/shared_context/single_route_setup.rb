@@ -1,6 +1,4 @@
 RSpec.shared_context "single route setup" do
-  include_context "monetary based selection setup"
-
   let(:sailing_code_from_existing_rate) { idr_sailing_code.sample.sailing_code }
   let(:route_data) {
     {

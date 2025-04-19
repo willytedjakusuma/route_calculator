@@ -1,6 +1,4 @@
 RSpec.shared_context "multi route setup" do
-  include_context "monetary based selection setup"
-
   let(:sailing_code_first_route) { idr_sailing_code.sample.sailing_code }
   let(:sailing_code_second_route) { idr_sailing_code.sample.sailing_code }
   let(:sailing_from_origin) do
