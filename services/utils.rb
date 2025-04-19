@@ -10,7 +10,7 @@ module Utils
   end
 
   def self.symbolize_to_string(hash)
-    # to manipulate keys to string key from symbol
+    # manipulate keys from string to symbol
     hash.transform_keys(&:to_s)
   end
 

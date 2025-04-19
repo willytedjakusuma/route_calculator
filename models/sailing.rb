@@ -1,6 +1,5 @@
 require_relative 'record'
 require_relative "../services/utils"
-require 'pry'
 
 class Sailing < Record
 
