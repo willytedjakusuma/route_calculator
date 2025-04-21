@@ -1,10 +1,14 @@
-# Route Calculator
+# ⛵ Route Calculator
 [![Ruby](https://img.shields.io/badge/ruby-3.2-red.svg?logo=ruby)](https://www.ruby-lang.org/en/news/2022/12/25/ruby-3-2-0-released/)
 
 A lightweight route calculation tool built with plain [Ruby](https://www.ruby-lang.org/en/).  
 No Rails, no frameworks — just clean, testable Ruby.
 
 ---
+## 🛠️ Pre-requisite
+
+Please Install docker following this documentation [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/)
+
 
 ## 🚀 Setup
 
